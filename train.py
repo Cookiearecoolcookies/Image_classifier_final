@@ -22,7 +22,7 @@ def get_input_args():
     parser = argparse.ArgumentParser(description='Create a trained neural network.')
 
     parser.add_argument('--data_directory', type=str, default="./flowers", help='Directory of where the images folders are located (train,test and valid).')
-    parser.add_argument('--arch', type=str, default="vgg19", help='architecture type, [vgg19, densenet161]')
+    parser.add_argument('--arch', type=str, default="densenet161", help='architecture type, [vgg19, densenet161]')
     parser.add_argument('--learning_rate', type=float, default=0.01, help='Learning rate is the rate at which the weights update.')
     parser.add_argument('--hidden_units', type=int, default=(512 * 7 * 7), help='hidden_units.')
     parser.add_argument('--epochs', type=int, default=7, help='number of repeated training sets.')
@@ -231,7 +231,7 @@ def save_model(in_args, image_datasets, model, optimizer):
 
         # some variables are stored while they might not be used in the prediction step, this creates a bit of redudency.
         checkpoint = {'arch': in_args.arch,
-                      'input_size': 25088, # not used when loading model
+                      'input_size': 2208, # not used when loading model
                       'output_size': 102,  # not used when loading model, and will change based on input json 
                       'batch_size':64,     # not used when loading model
                       'epochs': in_args.epochs,
