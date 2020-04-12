@@ -22,7 +22,7 @@ def get_input_args():
     parser = argparse.ArgumentParser(description='Create a trained neural network.')
 
     parser.add_argument('--input', type=str, default="", help='location of input image, if none is provide a random one will be selected.')
-    parser.add_argument('--checkpoint', type=str, default="./densenet/checkpoint.pth", help='Location of where checkpoint is.')
+    parser.add_argument('--checkpoint', type=str, default="./checkpoint.pth", help='Location of where checkpoint is.')
     parser.add_argument('--top_k', type=int, default=5, help='Number of results returned.')
     parser.add_argument('--gpu', type=bool, default=False, help='gpu enabled.')
     parser.add_argument('--category_names', type=str, default="./cat_to_name.json", help='List of category names.')
