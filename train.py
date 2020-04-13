@@ -24,7 +24,7 @@ def get_input_args():
     parser.add_argument('--data_directory', type=str, default="./flowers", help='Directory of where the images folders are located (train,test and valid).')
     parser.add_argument('--arch', type=str, default="densenet161", help='architecture type, [vgg19, densenet161]')
     parser.add_argument('--learning_rate', type=float, default=0.01, help='Learning rate is the rate at which the weights update.')
-    parser.add_argument('--hidden_units', type=int, default=(512 * 7 * 7), help='hidden_units.')
+    parser.add_argument('--hidden_units', type=int, default=4096, help='hidden_units.')
     parser.add_argument('--epochs', type=int, default=7, help='number of repeated training sets.')
     parser.add_argument('--save_dir', type=str, default="./", help='Directory where you would like the checkpoint to be saved.')
     parser.add_argument('--checkpoint', type=bool, default=False,help='Save trained model checkpoint to file')
@@ -99,11 +99,11 @@ def create_sequence(features, hidden_units, num_labels,drop_out):
 #     return modules
 
     return torch.nn.Sequential(OrderedDict([
-        ('fc1', torch.nn.Linear(features, 4096)),
-        ('norm', nn.BatchNorm1d(4096)),
+        ('fc1', torch.nn.Linear(features, hidden_units)),
+        ('norm', nn.BatchNorm1d(hidden_units)),
         ('relu', torch.nn.ReLU()),
         ('dropout', torch.nn.Dropout(p=drop_out)),
-        ('output', torch.nn.Linear(4096, num_labels)),
+        ('output', torch.nn.Linear(hidden_units, num_labels)),
         ('softmax',nn.LogSoftmax(dim=1))
     ]))
     
@@ -231,15 +231,10 @@ def save_model(in_args, image_datasets, model, optimizer):
 
         # some variables are stored while they might not be used in the prediction step, this creates a bit of redudency.
         checkpoint = {'arch': in_args.arch,
-                      'input_size': 2208, # not used when loading model
-                      'output_size': 102,  # not used when loading model, and will change based on input json 
-                      'batch_size':64,     # not used when loading model
                       'epochs': in_args.epochs,
                       'learning_rate': in_args.learning_rate,
                       'classifier' : model.classifier, 
-                      "optimizer": optimizer, # not used when loading model
                       'state_dict': model.state_dict(),
-                      'hidden_units': in_args.hidden_units, # not used when loading model
                       'class_to_idx': model.class_to_idx}
 
         location = in_args.save_dir
